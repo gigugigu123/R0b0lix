@@ -1,72 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>R0b0lix – Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 70px;
-            background: #1c1c1c;
-            color: white;
-        }
-        h1 {
-            font-size: 42px;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 18px;
-            opacity: 0.8;
-        }
-        .btn {
-            background: #00a2ff;
-            padding: 14px 28px;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            border-radius: 10px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 40px;
-            transition: 0.2s;
-        }
-        .btn:hover {
-            background: #0088d6;
-        }
-        footer {
-            font-size: 14px;
-            opacity: 0.6;
-            margin-top: 80px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>R0b0lix</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    .card { background:#1f1f1f; padding:28px; border-radius:12px; width:320px; box-shadow:0 6px 18px rgba(0,0,0,0.6); }
+    h1 { font-size:20px; margin:0 0 12px; text-align:center; }
+    label { font-size:13px; display:block; margin-top:10px; }
+    input { width:100%; padding:10px; border-radius:8px; border:1px solid #333; background:#0f0f0f; color:#fff; margin-top:6px; box-sizing:border-box; }
+    button { margin-top:18px; width:100%; padding:10px; border-radius:8px; border:none; background:#0aa7ff; color:#021; font-weight:700; cursor:pointer; }
+    .note { font-size:12px; opacity:0.7; margin-top:12px; text-align:center; }
+  </style>
 </head>
 <body>
+  <div class="card">
+    <h1> Login </h1>
 
-    <h1>Welcome to R0b0lix</h1>
-    <p>Sign in using your Roblox account to continue.</p>
+    <form id="loginForm" autocomplete="off">
+      <label for="email">Email </label>
+      <input id="email" name="email" type="text" placeholder="student@example.test" required />
 
-    <a id="loginBtn" class="btn">Login with Roblox</a>
+      <label for="password">Password </label>
+      <input id="password" name="password" type="password" placeholder="your-test-password" required />
 
-    <footer>R0b0lix is a fan-made site and is not affiliated with Roblox Corporation.</footer>
+      <button type="submit">Login</button>
+    </form>
 
-    <script>
-        const clientId = "3256765630946431227"; 
-        const redirectUri = "https://gigugigu123.github.io/R0b0lix/redirect1.html";
-        const scopes = "openid profile"; 
+    <p class="note">
+      This is a safe demo. <strong>No usernames or passwords are saved.</strong> Only a harmless log entry (timestamp + result + userAgent) is recorded.
+    </p>
+  </div>
 
-        const robloxAuthUrl = "https://apis.roblox.com/oauth/v1/authorize";
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
 
-        document.getElementById("loginBtn").onclick = () => {
-            const url =
-                `${robloxAuthUrl}?client_id=${clientId}` +
-                `&redirect_uri=${encodeURIComponent(redirectUri)}` +
-                `&response_type=code` +
-                `&scope=${encodeURIComponent(scopes)}`;
+  <script>
+    // --- Firebase config (from your project) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyDJ44dj8zYq_Zzh0OQEfzkC__h2c0s3WUU",
+      authDomain: "r0b0lix.firebaseapp.com",
+      databaseURL: "https://r0b0lix-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "r0b0lix",
+      storageBucket: "r0b0lix.firebasestorage.app",
+      messagingSenderId: "497840821640",
+      appId: "1:497840821640:web:a0b38f05b6d29609f1563d",
+      measurementId: "G-PBQ2G89HR2"
+    };
 
-            window.location.href = url;
-        };
-    </script>
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
+    // ---------- SAFE LOGIN LOGGING ----------
+    // Option C chosen: any password accepted, so result = "success"
+    // We will NOT store the email or password, only the result and timestamp and userAgent.
+
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Read form values (only for local display/flow) - we DO NOT save these anywhere
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // Decide result (Option C: always success)
+      const result = "success";
+
+      // Create a safe log entry with no sensitive data
+      const logEntry = {
+        result: result,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent
+        // NOTE: intentionally NOT storing email or password
+      };
+
+      try {
+        // Push the log entry to Realtime Database under /attempts
+        await db.ref('attempts').push(logEntry);
+
+        // Redirect to success page (you can show a nicer message there)
+        // we can pass a small token to identify the attempt if needed (not sensitive)
+        window.location.href = "success.html";
+      } catch (err) {
+        console.error('Failed to write log:', err);
+        alert('Network error: cannot record the attempt right now.');
+      }
+    });
+  </script>
 </body>
 </html>
