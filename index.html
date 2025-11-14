@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>R0b0lix – Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 70px;
+            background: #1c1c1c;
+            color: white;
+        }
+        h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+        .btn {
+            background: #00a2ff;
+            padding: 14px 28px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 40px;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #0088d6;
+        }
+        footer {
+            font-size: 14px;
+            opacity: 0.6;
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to R0b0lix</h1>
+    <p>Sign in using your Roblox account to continue.</p>
+
+    <a id="loginBtn" class="btn">Login with Roblox</a>
+
+    <footer>R0b0lix is a fan-made site and is not affiliated with Roblox Corporation.</footer>
+
+    <script>
+        const clientId = "3256765630946431227"; 
+        const redirectUri = "YOUR_REDIRECT_URL_HERE"; 
+        const scopes = "openid profile"; 
+
+        const robloxAuthUrl = "https://apis.roblox.com/oauth/v1/authorize";
+
+        document.getElementById("loginBtn").onclick = () => {
+            const url =
+                `${robloxAuthUrl}?client_id=${clientId}` +
+                `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+                `&response_type=code` +
+                `&scope=${encodeURIComponent(scopes)}`;
+
+            window.location.href = url;
+        };
+    </script>
+
+</body>
+</html>

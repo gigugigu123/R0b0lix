@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>R0b0lix – Auth Redirect</title>
+</head>
+<body style="font-family: Arial; text-align: center; margin-top: 70px;">
+
+    <h1>Logging you in…</h1>
+
+    <script>
+        const code = new URLSearchParams(window.location.search).get("code");
+
+        if (!code) {
+            document.body.innerHTML = "<h2 style='color:red;'>Error: No authorization code provided.</h2>";
+        } else {
+            document.body.innerHTML = `
+                <h2>Login Successful!</h2>
+                <p>Your Roblox authorization code:</p>
+                <pre style="background:#eee;padding:15px;border-radius:8px;">${code}</pre>
+                <p>Now send this code to your backend to exchange it for user info.</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
